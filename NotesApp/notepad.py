@@ -5,7 +5,7 @@ from ttkbootstrap import Style
 
 # Create the main window
 root = tk.Tk()
-root.title("Notes App")
+root.title("story planner")
 root.geometry("500x500")
 style = Style(theme='journal')
 style = ttk.Style()
@@ -19,7 +19,7 @@ notebook = ttk.Notebook(root, style="TNotebook")
 # Load saved notes
 notes = {}
 try:
-    with open("notes.json", "r") as f:
+    with open("next.json", "r") as f:
         notes = json.load(f)
 except FileNotFoundError:
     pass
@@ -57,11 +57,11 @@ def add_note():
         notes[title] = content.strip()
         
         # Save the notes dictionary to the file
-        with open("notes.json", "w") as f:
+        with open("next.json", "w") as f:
             json.dump(notes, f)
         
         # Add the note to the notebook
-        note_content = tk.Text(notebook, width=40, height=10)
+        note_content = tk.Text(notebook, width=50, height=15)
         note_content.insert(tk.END, content)
         notebook.forget(notebook.select())
         notebook.add(note_content, text=title)
@@ -73,21 +73,45 @@ def add_note():
 
 def load_notes():
     try:
-        with open("notes.json", "r") as f:
+        with open("next.json", "r") as f:
             notes = json.load(f)
-
+        a=[]
+        i=0
         for title, content in notes.items():
-            # Add the note to the notebook
-            note_content = tk.Text(notebook, width=40, height=10)
-            note_content.insert(tk.END, content)
-            notebook.add(note_content, text=title)
+            a.append("tab"+(str(i)))
+            a[i] = tk.Text(notebook, width=50, height=15)
+            a[i].insert(tk.END, content)
+            notebook.add(a[i], text=title)
+            i +=1
+            
+        def save_note_main():
+            # save button in each old tab, so changes don't get lost.
+            current_tab = notebook.index(notebook.select())
+            note_title = notebook.tab(current_tab, "text")
+            content = a[(int(current_tab))].get("1.0", tk.END)
+
+            # Add the note to the notes dictionary
+            notes[note_title] = content.strip()
+            
+            # Save the notes dictionary to the file
+            with open("next.json", "w") as f:
+                json.dump(notes, f)
+            
+            
+        # Add the save button
+
+        save_button_main = ttk.Button(notebook, text="Save", 
+                             command=save_note_main, style="secondary.TButton")
+        save_button_main.pack(side=tk.BOTTOM, padx=10, pady=10)
 
     except FileNotFoundError:
+        
         # If the file does not exist, do nothing
         pass
 
 # Call the load_notes function when the app starts
 load_notes()
+
 
 # Create a function to delete a note
 def delete_note():
@@ -109,7 +133,7 @@ def delete_note():
         notes.pop(note_title)
         
         # Save the notes dictionary to the file
-        with open("notes.json", "w") as f:
+        with open("next.json", "w") as f:
             json.dump(notes, f)
 
 # Add buttons to the main window
@@ -120,5 +144,7 @@ new_button.pack(side=tk.LEFT, padx=10, pady=10)
 delete_button = ttk.Button(root, text="Delete", 
                            command=delete_note, style="primary.TButton")
 delete_button.pack(side=tk.LEFT, padx=10, pady=10)
+
+
 
 root.mainloop()
