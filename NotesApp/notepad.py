@@ -19,7 +19,7 @@ notebook = ttk.Notebook(root, style="TNotebook")
 # Load saved notes
 notes = {}
 try:
-    with open("next.json", "r") as f:
+    with open("notes.json", "r") as f:
         notes = json.load(f)
 except FileNotFoundError:
     pass
@@ -57,7 +57,7 @@ def add_note():
         notes[title] = content.strip()
         
         # Save the notes dictionary to the file
-        with open("next.json", "w") as f:
+        with open("notes.json", "w") as f:
             json.dump(notes, f)
         
         # Add the note to the notebook
@@ -73,7 +73,7 @@ def add_note():
 
 def load_notes():
     try:
-        with open("next.json", "r") as f:
+        with open("notes.json", "r") as f:
             notes = json.load(f)
         a=[]
         i=0
@@ -94,7 +94,7 @@ def load_notes():
             notes[note_title] = content.strip()
             
             # Save the notes dictionary to the file
-            with open("next.json", "w") as f:
+            with open("notes.json", "w") as f:
                 json.dump(notes, f)
             
             
@@ -133,7 +133,7 @@ def delete_note():
         notes.pop(note_title)
         
         # Save the notes dictionary to the file
-        with open("next.json", "w") as f:
+        with open("notes.json", "w") as f:
             json.dump(notes, f)
 
 # Add buttons to the main window
