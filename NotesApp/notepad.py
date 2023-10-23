@@ -63,9 +63,10 @@ def add_note():
         # Add the note to the notebook
         note_content = tk.Text(notebook, width=50, height=15)
         note_content.insert(tk.END, content)
+        note_content.insert(tk.END, "(reopen window to alter this note)")
         notebook.forget(notebook.select())
         notebook.add(note_content, text=title)
-        
+     
     # Add a save button to the note frame
     save_button = ttk.Button(note_frame, text="Save", 
                              command=save_note, style="secondary.TButton")
@@ -107,10 +108,10 @@ def save_note_main():
             # Save the notes dictionary to the file
     with open("notes.json", "w") as f:
         json.dump(notes, f)
+    confirm = messagebox.showinfo("thanks","your note is saved")
 # Call the load_notes function when the app starts
 a = load_notes()
 
-print(a)
 # Create a function to delete a note
 def delete_note():
     # Get the current tab index
@@ -121,7 +122,7 @@ def delete_note():
     
     # Show a confirmation dialog
     confirm = messagebox.askyesno("Delete Note", 
-                                  f"Are you sure you want to delete {note_title}?")
+                                  f"Are you sure you want to delete ({note_title})?")
     
     if confirm:
         # Remove the note from the notebook
