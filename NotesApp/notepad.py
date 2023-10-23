@@ -70,6 +70,7 @@ def add_note():
     save_button = ttk.Button(note_frame, text="Save", 
                              command=save_note, style="secondary.TButton")
     save_button.grid(row=2, column=1, padx=10, pady=10)
+global a
 
 def load_notes():
     try:
@@ -83,21 +84,6 @@ def load_notes():
             a[i].insert(tk.END, content)
             notebook.add(a[i], text=title)
             i +=1
-            
-        def save_note_main():
-            # save button in each old tab, so changes don't get lost.
-            current_tab = notebook.index(notebook.select())
-            note_title = notebook.tab(current_tab, "text")
-            content = a[(int(current_tab))].get("1.0", tk.END)
-
-            # Add the note to the notes dictionary
-            notes[note_title] = content.strip()
-            
-            # Save the notes dictionary to the file
-            with open("notes.json", "w") as f:
-                json.dump(notes, f)
-            
-            
         # Add the save button
 
         save_button_main = ttk.Button(notebook, text="Save", 
@@ -108,11 +94,23 @@ def load_notes():
         
         # If the file does not exist, do nothing
         pass
+    return(a)
+def save_note_main():
+            # save button in each old tab, so changes don't get lost.
+    current_tab = notebook.index(notebook.select())
+    note_title = notebook.tab(current_tab, "text")
+    content = a[(int(current_tab))].get("1.0", tk.END)
 
+            # Add the note to the notes dictionary
+    notes[note_title] = content.strip()
+            
+            # Save the notes dictionary to the file
+    with open("notes.json", "w") as f:
+        json.dump(notes, f)
 # Call the load_notes function when the app starts
-load_notes()
+a = load_notes()
 
-
+print(a)
 # Create a function to delete a note
 def delete_note():
     # Get the current tab index
