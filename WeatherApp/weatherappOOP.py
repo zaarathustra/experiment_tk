@@ -4,6 +4,7 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 import ttkbootstrap
 
+#just redoing some apps with classes instead of just functions.
 class WeatherApp:
     def __init__(self, root):
         self.root = root
